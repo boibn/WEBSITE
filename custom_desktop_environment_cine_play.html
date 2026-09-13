@@ -174,8 +174,8 @@
 
         .cine-search-results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            gap: 32px 30px;
             margin-top: 30px;
             max-width: 1180px;
         }
@@ -185,11 +185,55 @@
         }
 
         .cine-search-card {
-            min-height: 230px;
+            min-height: 0;
+            border: 0;
+            border-radius: 2px;
+            background: transparent;
+            box-shadow: none;
+            overflow: visible;
+            transition: transform 180ms ease;
+        }
+
+        .cine-search-card:hover {
+            transform: translateY(-3px);
+            border: 0;
+            box-shadow: none;
         }
 
         .cine-search-card .discover-card-cover {
-            height: 148px;
+            height: auto;
+            aspect-ratio: 0.74;
+            border-radius: 2px;
+        }
+
+        .cine-search-card .discover-card-body {
+            padding: 9px 0 0;
+        }
+
+        .cine-search-card .discover-card-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cine-search-card .discover-card-tag {
+            display: block;
+            margin-top: 5px;
+            color: #8c8c8c;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .cine-search-card .search-card-action {
+            display: block;
+            margin-top: 7px;
+            color: #b5b5b5;
+            font-size: 10px;
+            font-weight: 600;
         }
 
         .cine-search-empty {
@@ -257,6 +301,153 @@
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        #music-player-window,
+        #explorer-window,
+        .game-window-instance {
+            background: linear-gradient(145deg, rgba(24, 28, 38, 0.96), rgba(7, 9, 13, 0.98)) !important;
+            border: 1px solid rgba(148, 163, 184, 0.24) !important;
+            border-radius: 14px !important;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(96, 165, 250, 0.05), 0 0 34px rgba(37, 99, 235, 0.12) !important;
+            isolation: isolate;
+        }
+
+        #music-player-window::before,
+        #explorer-window::before,
+        .game-window-instance::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(125deg, rgba(255,255,255,0.08), transparent 24%, transparent 70%, rgba(59,130,246,0.06));
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        #music-header,
+        #explorer-header,
+        #game-window-header {
+            height: 46px !important;
+            background: rgba(7, 9, 14, 0.78) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.025);
+        }
+
+        #music-header,
+        #explorer-header {
+            padding-left: 16px;
+            padding-right: 12px;
+        }
+
+        #game-window-header {
+            padding-left: 14px;
+            padding-right: 10px;
+        }
+
+        #music-header > button,
+        #explorer-header > button,
+        #game-window-header button,
+        #cine-window-header button {
+            transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+        }
+
+        #music-header > button:hover,
+        #explorer-header > button:hover,
+        #game-window-header button[title="Close"]:hover,
+        #cine-window-header button:hover {
+            transform: scale(1.05);
+            background: rgba(239, 68, 68, 0.72) !important;
+            color: white !important;
+        }
+
+        #game-window-header button[title="Fullscreen"]:hover {
+            background: rgba(59, 130, 246, 0.32) !important;
+            color: white !important;
+        }
+
+        #music-player-window > div:last-child,
+        #explorer-window > div:last-child,
+        .game-window-instance > div:last-child {
+            background: rgba(4, 6, 10, 0.5);
+        }
+
+        #music-player-window,
+        #explorer-window,
+        .game-window-instance {
+            transition: box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        #music-player-window:hover,
+        #explorer-window:hover,
+        .game-window-instance:hover {
+            border-color: rgba(147, 197, 253, 0.38) !important;
+            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(96, 165, 250, 0.08), 0 0 42px rgba(37, 99, 235, 0.18) !important;
+        }
+
+        #ps5-window {
+            position: absolute !important;
+            inset: auto !important;
+            top: 7vh !important;
+            left: 50% !important;
+            width: min(1180px, 92vw);
+            height: min(780px, 84vh);
+            transform: translateX(-50%) !important;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            border-radius: 16px;
+            box-shadow: 0 35px 100px rgba(0,0,0,0.72), 0 0 40px rgba(37,99,235,0.16);
+            resize: both;
+            min-width: 640px;
+            min-height: 420px;
+        }
+
+        #cine-window-header,
+        #cine-navbar {
+            background: linear-gradient(180deg, rgba(7, 9, 14, 0.94), rgba(7, 9, 14, 0.78)) !important;
+            border-color: rgba(148, 163, 184, 0.18) !important;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        }
+
+        #cine-window-header {
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            width: 100% !important;
+            height: 46px !important;
+            min-height: 46px;
+            transform: none !important;
+            opacity: 1 !important;
+            flex-shrink: 0;
+            pointer-events: auto !important;
+            cursor: move;
+        }
+
+        #cine-navbar {
+            top: 0 !important;
+            transform: none !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            height: 52px;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        #cineplay-app-body {
+            padding-top: 76px !important;
+        }
+
+        #cine-search-view {
+            padding-top: 116px;
+        }
+
+        #cine-navbar button {
+            transition: color 160ms ease, border-color 160ms ease, text-shadow 160ms ease;
+        }
+
+        #cine-navbar button:hover,
+        #cine-navbar button.text-white {
+            text-shadow: 0 0 16px rgba(147, 197, 253, 0.42);
         }
 
         .library-shell {
@@ -807,6 +998,7 @@
         }
 
         .desktop-icon-visual {
+            position: relative;
             width: 42px;
             height: 42px;
             display: flex;
@@ -816,6 +1008,25 @@
             background: rgba(12, 16, 28, 0.78);
             border: 1px solid rgba(255,255,255,0.18);
             box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+        }
+
+        .desktop-icon-shortcut-badge {
+            position: absolute;
+            left: -5px;
+            bottom: -5px;
+            width: 17px;
+            height: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(6, 10, 18, 0.95);
+            border-radius: 5px;
+            background: #e5efff;
+            color: #172554;
+            font-size: 11px;
+            font-weight: 900;
+            line-height: 1;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.45);
         }
 
         .desktop-icon-visual svg,
@@ -839,6 +1050,11 @@
             outline: 1px dashed rgba(147,197,253,0.6);
             outline-offset: -10px;
             background: rgba(37,99,235,0.06);
+        }
+
+        #taskbar [data-desktop-app="music"],
+        #taskbar [data-desktop-app="explorer"] {
+            display: none;
         }
 
         .boot-screen {
@@ -1146,7 +1362,7 @@
                 </button>
                 <button draggable="true" data-desktop-app="music" data-desktop-label="Cine-Beats" onclick="toggleMusicPlayerWindow()" class="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/15 transition-all cursor-pointer text-pink-400 hover:text-pink-300" title="Cine-Beats Music">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
-                </button>
+                    </button>
                 <button draggable="true" data-desktop-app="explorer" data-desktop-label="File Explorer" onclick="toggleExplorerWindow()" class="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/15 transition-all cursor-pointer text-amber-400 hover:text-amber-300" title="File Explorer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                 </button>
@@ -1317,10 +1533,6 @@
                 <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>
                 <div class="flex flex-col"><span class="text-xs font-bold">Wi-Fi</span><span class="text-[10px] text-gray-400">Connected</span></div>
             </div>
-            <div onclick="toggleAmbientRain()" class="bg-white/10 hover:bg-white/15 p-3 rounded-2xl flex items-center gap-3 transition cursor-pointer">
-                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
-                <div class="flex flex-col"><span class="text-xs font-bold">Rain Sound</span><span id="rain-status-text" class="text-[10px] text-cyan-400">Active</span></div>
-            </div>
         </div>
         <div class="flex flex-col gap-1.5 bg-black/30 p-3 rounded-2xl">
             <div class="flex justify-between text-xs text-gray-300 font-medium"><span>Audio Volume</span><span id="vol-label">80%</span></div>
@@ -1344,7 +1556,6 @@
         <div id="cineplay-content" class="flex-1 relative overflow-hidden animated-cine-bg flex flex-col text-white w-full h-full">
             <div id="cine-navbar" class="absolute top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10 px-8 py-4 flex items-center justify-between transform -translate-y-full opacity-0 pointer-events-none transition-all duration-300 shrink-0">
                 <div class="flex items-center gap-8 text-sm font-medium">
-                    <button onclick="switchTab('home')" id="tab-home" class="text-white border-b-2 border-blue-500 pb-1 cursor-pointer transition">Home</button>
                     <button onclick="switchTab('library')" id="tab-library" class="text-gray-400 hover:text-white pb-1 cursor-pointer transition">Game Library</button>
                     <button onclick="switchTab('search')" id="tab-search" class="text-gray-400 hover:text-white pb-1 cursor-pointer transition">Search</button>
                 </div>
@@ -1491,42 +1702,6 @@
                                             <div class="discover-card-tag">Arcade • Action</div>
                                         </div>
                                         <span class="library-badge">4.9</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div onclick="launchLibraryGame('Leaf Runner', 'Action', 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=400&auto=format&fit=crop')" class="discover-card">
-                                <div class="discover-card-cover" style="background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=400&auto=format&fit=crop');"></div>
-                                <div class="discover-card-body">
-                                    <div class="flex items-start justify-between gap-2">
-                                        <div>
-                                            <div class="discover-card-title">Leaf Runner</div>
-                                            <div class="discover-card-tag">Action • Sim</div>
-                                        </div>
-                                        <span class="library-badge">4.8</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div onclick="launchLibraryGame('Shadow Woods', 'Adventure', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop')" class="discover-card">
-                                <div class="discover-card-cover" style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop');"></div>
-                                <div class="discover-card-body">
-                                    <div class="flex items-start justify-between gap-2">
-                                        <div>
-                                            <div class="discover-card-title">Shadow Woods</div>
-                                            <div class="discover-card-tag">Adventure</div>
-                                        </div>
-                                        <span class="library-badge">4.7</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div onclick="launchLibraryGame('Green Horizon', 'Exploration', 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop')" class="discover-card">
-                                <div class="discover-card-cover" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop');"></div>
-                                <div class="discover-card-body">
-                                    <div class="flex items-start justify-between gap-2">
-                                        <div>
-                                            <div class="discover-card-title">Green Horizon</div>
-                                            <div class="discover-card-tag">Exploration</div>
-                                        </div>
-                                        <span class="library-badge">4.6</span>
                                     </div>
                                 </div>
                             </div>
@@ -1734,56 +1909,8 @@
             }
         }
 
-        let soundInitialized = false;
-        let masterVolumeNode = null;
-        let rainWashNode = null;
-        let rainPatterNode = null;
-        let isRainPlaying = true;
-
-        async function initRainSound() {
-            if (soundInitialized) return;
-            try {
-                await Tone.start();
-                masterVolumeNode = new Tone.Volume(-25);
-                rainWashNode = new Tone.Noise("pink");
-                const washFilter = new Tone.Filter(1000, "lowpass");
-                rainPatterNode = new Tone.Noise("white");
-                const patterFilter = new Tone.Filter(3500, "highpass");
-                const patterVolume = new Tone.Volume(-12);
-
-                rainWashNode.chain(washFilter, masterVolumeNode, Tone.Destination);
-                rainPatterNode.chain(patterFilter, patterVolume, masterVolumeNode, Tone.Destination);
-                rainWashNode.start();
-                rainPatterNode.start();
-                soundInitialized = true;
-            } catch (e) {
-                console.log("Audio init skipped", e);
-            }
-        }
-        document.addEventListener('click', initRainSound, { once: true });
-
-        function toggleAmbientRain() {
-            if (!soundInitialized) return;
-            isRainPlaying = !isRainPlaying;
-            if (isRainPlaying) {
-                masterVolumeNode.mute = false;
-                document.getElementById('rain-status-text').textContent = "Active";
-            } else {
-                masterVolumeNode.mute = true;
-                document.getElementById('rain-status-text').textContent = "Muted";
-            }
-        }
-
         function adjustVolume(val) {
             document.getElementById('vol-label').textContent = `${val}%`;
-            if (masterVolumeNode) {
-                if (val == 0) {
-                    masterVolumeNode.mute = true;
-                } else {
-                    masterVolumeNode.mute = false;
-                    masterVolumeNode.volume.value = Tone.gainToDb(val / 100) - 10;
-                }
-            }
         }
 
         let musicPlaying = false;
@@ -1894,8 +2021,22 @@
             if (sourceVisual) {
                 const visualContent = sourceVisual.cloneNode(true);
                 visualContent.classList.remove('group-hover:scale-105');
+                visualContent.classList.remove('group-hover:scale-110');
+                visualContent.querySelectorAll('[class*="absolute"]').forEach(element => element.remove());
                 visual.appendChild(visualContent);
+            } else {
+                const fallbackIcons = {
+                    cine: '<img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/ps.png" alt="">',
+                    music: '<span style="font-size:22px;color:#f472b6">♫</span>',
+                    explorer: '<span style="font-size:22px;color:#fbbf24">▰</span>',
+                    wallpaper: '<span style="font-size:22px;color:#d1d5db">▧</span>'
+                };
+                visual.innerHTML = fallbackIcons[appName] || '';
             }
+            const shortcutBadge = document.createElement('span');
+            shortcutBadge.className = 'desktop-icon-shortcut-badge';
+            shortcutBadge.textContent = '↗';
+            visual.appendChild(shortcutBadge);
             const caption = document.createElement('span');
             caption.className = 'desktop-icon-label';
             caption.textContent = label;
@@ -2250,10 +2391,8 @@
 
         const builtInSearchGames = [
             { title: 'PEAK', category: 'Arcade', image: 'https://cdn.jsdelivr.net/gh/boibn/port-images@main/peak.jpg', type: 'built-in' },
-            { title: 'Leaf Runner', category: 'Action', image: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=400&auto=format&fit=crop', type: 'built-in' },
-            { title: 'Shadow Woods', category: 'Adventure', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop', type: 'built-in' },
-            { title: 'Green Horizon', category: 'Exploration', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop', type: 'built-in' },
-            { title: 'How to Fish', category: 'Simulation', image: 'https://cdn.jsdelivr.net/gh/boibn/port-images@main/howtofish.jpg', type: 'built-in' }
+            { title: 'How to Fish', category: 'Simulation', image: 'https://cdn.jsdelivr.net/gh/boibn/port-images@main/howtofish.jpg', type: 'built-in' },
+            { title: 'Ravenfield', category: 'Action', image: 'https://cdn.jsdelivr.net/gh/boibn/port-images@main/ravenfield.jpg', type: 'built-in' }
         ];
 
         function getSearchGames() {
@@ -2298,7 +2437,7 @@
 
                 const body = document.createElement('div');
                 body.className = 'discover-card-body';
-                body.innerHTML = `<div class="discover-card-title"></div><div class="discover-card-tag"></div>`;
+                body.innerHTML = `<div class="discover-card-title"></div><div class="discover-card-tag"></div><span class="search-card-action">▶ Launch</span>`;
                 body.querySelector('.discover-card-title').textContent = game.title;
                 body.querySelector('.discover-card-tag').textContent = game.category;
 
@@ -2369,6 +2508,8 @@
                 htmlContent = `<!DOCTYPE html><html><body><script>fetch("https://cdn.jsdelivr.net/gh/boibn/ports@main/PEAK.html").then(r=>r.text()).then(t=>{document.open();document.write(t);document.close()})<\/script></body></html>`;
             } else if (title === 'How to Fish') {
                 htmlContent = `<!DOCTYPE html><html><body><script>fetch("https://cdn.jsdelivr.net/gh/boibn/ports@main/HowToFish.html").then(r=>r.text()).then(t=>{document.open();document.write(t);document.close()})<\/script></body></html>`;
+            } else if (title === 'Ravenfield') {
+                htmlContent = `<!DOCTYPE html><html><body><script>fetch("https://cdn.jsdelivr.net/gh/boibn/ports@main/RavenField.html").then(r=>r.text()).then(t=>{document.open();document.write(t);document.close()})<\/script></body></html>`;
             }
 
             selectedGameData = {
@@ -2567,6 +2708,40 @@
         const cineSearchView = document.getElementById('cine-search-view');
         const cineSearchInput = document.getElementById('cine-search-input');
         const cineAppBody = document.getElementById('cineplay-app-body');
+        let isCineWindowDragging = false;
+        let cineDragOffsetX = 0;
+        let cineDragOffsetY = 0;
+
+        cineHeader.addEventListener('mousedown', event => {
+            if (event.target.closest('button')) return;
+
+            const rect = ps5Window.getBoundingClientRect();
+            ps5Window.style.setProperty('transform', 'none', 'important');
+            ps5Window.style.setProperty('left', `${rect.left}px`, 'important');
+            ps5Window.style.setProperty('top', `${rect.top}px`, 'important');
+            cineDragOffsetX = event.clientX - rect.left;
+            cineDragOffsetY = event.clientY - rect.top;
+            isCineWindowDragging = true;
+            ps5Window.style.zIndex = '140';
+            event.preventDefault();
+        });
+
+        document.addEventListener('mousemove', event => {
+            if (!isCineWindowDragging) return;
+            const maxLeft = Math.max(0, window.innerWidth - ps5Window.offsetWidth);
+            const maxTop = Math.max(0, window.innerHeight - ps5Window.offsetHeight);
+            const nextLeft = Math.max(0, Math.min(event.clientX - cineDragOffsetX, maxLeft));
+            const nextTop = Math.max(0, Math.min(event.clientY - cineDragOffsetY, maxTop));
+            ps5Window.style.setProperty('left', `${nextLeft}px`, 'important');
+            ps5Window.style.setProperty('top', `${nextTop}px`, 'important');
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (!isCineWindowDragging) return;
+            isCineWindowDragging = false;
+            ps5Window.style.zIndex = '130';
+        });
+
         const searchPlaceholderPhrases = [
             'Games, Apps, Articles and More',
             'Search for PEAK',
@@ -2657,7 +2832,7 @@
         });
 
         function switchTab(tabName) {
-            ['home', 'library', 'store', 'search'].forEach(t => {
+            ['library', 'search'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if (btn) {
                     if (t === tabName) {
