@@ -457,7 +457,7 @@
                         </button>
                     </div>
                 </div>
-                <iframe id="game-player-frame" class="game-player-frame" title="Game player" allow="fullscreen; autoplay; gamepad"></iframe>
+                <iframe id="game-player-frame" class="game-player-frame" title="Game player" sandbox="allow-scripts allow-pointer-lock allow-forms allow-downloads" allow="fullscreen; autoplay; gamepad"></iframe>
             </section>
 
             <div id="game-grid" class="grid shrink-0 grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4" aria-live="polite"></div>
@@ -681,11 +681,56 @@
             gameFavoriteButton.innerHTML = `<i class="fa-${isFavorite ? 'solid text-rose-300' : 'regular'} fa-heart" aria-hidden="true"></i>`;
         }
 
-        function loadCurrentGame() {
-            if (!currentGame) return;
-            const url = currentGame.url;
-            gamePlayerFrame.srcdoc = '<!DOCTYPE html><html><body><script>fetch("' + url + '").then(r=>r.text()).then(t=>{document.open();document.write(t);document.close()})<\/script></body></html>';
-            gamePlayerFrame.title = currentGame.name;
+        let currentGameLoadId = 0;
+
+        async function loadCurrentGame() {
+            const game = currentGame;
+            if (!game) return;
+            const loadId = ++currentGameLoadId;
+            gamePlayerFrame.title = game.name;
+
+            try {
+                const response = await fetch(game.url);
+                if (!response.ok) throw new Error(`Game request failed: ${response.status}`);
+                const gameDocument = new DOMParser().parseFromString(await response.text(), 'text/html');
+                if (!gameDocument.querySelector('base[href]')) {
+                    const baseElement = gameDocument.createElement('base');
+                    baseElement.href = new URL('.', game.url).href;
+                    gameDocument.head.prepend(baseElement);
+                }
+
+                if (loadId !== currentGameLoadId || currentGame !== game) return;
+                if (loadId !== currentGameLoadId || currentGame !== game) return;
+                gamePlayerFrame.srcdoc = `<!DOCTYPE html>${gameDocument.documentElement.outerHTML}`;
+            } catch (error) {
+                if (loadId === currentGameLoadId) console.error('Could not load game:', error);
+            }
+        }
+
+        function openGameInAboutBlank(game) {
+            if (!game?.url) return;
+            const gameWindow = window.open('about:blank', '_blank');
+            if (!gameWindow) return;
+
+            gameWindow.document.write(`<!DOCTYPE html><html><head><title>${game.name}</title></head><body><p>Loading ${game.name}...</p><script>
+                (async () => {
+                    try {
+                        const response = await fetch(${JSON.stringify(game.url)});
+                        if (!response.ok) throw new Error('Game request failed: ' + response.status);
+                        const gameDocument = new DOMParser().parseFromString(await response.text(), 'text/html');
+                        const baseElement = gameDocument.createElement('base');
+                        baseElement.href = new URL('.', ${JSON.stringify(game.url)}).href;
+                        gameDocument.head.prepend(baseElement);
+                        document.open();
+                        document.write('<!DOCTYPE html>' + gameDocument.documentElement.outerHTML);
+                        document.close();
+                    } catch (error) {
+                        document.body.textContent = 'Unable to load ${game.name}.';
+                        console.error('Could not open game in about:blank:', error);
+                    }
+                })();
+            <\/script></body></html>`);
+            gameWindow.document.close();
         }
 
         function openGame(game) {
@@ -716,7 +761,8 @@
             }
         });
         document.getElementById('game-close').addEventListener('click', () => {
-            gamePlayerFrame.srcdoc = '';
+            currentGameLoadId++;
+            gamePlayerFrame.src = 'about:blank';
             gamePlayer.classList.add('hidden');
             currentGame = null;
         });
@@ -739,7 +785,9 @@
                 return matchesCategory && game.name.toLowerCase().includes(query);
             });
 
-            grid.innerHTML = filteredGames.map(game => game.url && game.image
+            grid.innerHTML = filteredGames.map(game => game.name === 'Cover Pit'
+                ? `<article class="game-card glass-panel relative aspect-square overflow-hidden rounded-3xl p-4"><button class="absolute inset-0 flex w-full flex-col items-center justify-center gap-3 pb-16 text-white" type="button" data-game-name="${game.name}" aria-label="Play ${game.name} in Arctic"><i class="fa-solid fa-gamepad text-4xl text-cyan-200" aria-hidden="true"></i><span class="text-lg font-bold">${game.name}</span><span class="text-xs text-blue-200/70">Play in Arctic</span></button><button class="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-center gap-2 rounded-xl border border-cyan-200/30 bg-slate-950/80 px-3 py-2.5 text-xs font-semibold text-cyan-100 transition-colors hover:bg-slate-900" type="button" data-open-about-blank="${game.name}" aria-label="Open ${game.name} in about:blank"><i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i><span>Open in about:blank</span></button></article>`
+                : game.url && game.image
                 ? `<button class="game-card game-card-image glass-panel aspect-square rounded-3xl w-full cursor-pointer" type="button" data-game-name="${game.name}" aria-label="Play ${game.name}"><img src="${game.image}" alt=""><span class="game-card-image-label"><span>${game.name}</span><i class="fa-solid fa-play" aria-hidden="true"></i></span></button>`
                 : game.url
                     ? `<button class="game-card glass-panel aspect-square rounded-3xl" type="button" data-game-name="${game.name}" aria-label="Play ${game.name}"></button>`
@@ -747,6 +795,9 @@
             ).join('');
             grid.querySelectorAll('[data-game-name]').forEach(card => {
                 card.addEventListener('click', () => openGame(sampleGames.find(game => game.name === card.dataset.gameName)));
+            });
+            grid.querySelectorAll('[data-open-about-blank]').forEach(button => {
+                button.addEventListener('click', () => openGameInAboutBlank(sampleGames.find(game => game.name === button.dataset.openAboutBlank)));
             });
             document.getElementById('game-count').textContent = `${filteredGames.length} ${filteredGames.length === 1 ? 'game' : 'games'}`;
         }
