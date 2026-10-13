@@ -187,9 +187,11 @@
       border: 1px solid rgb(255 255 255 / 65%);
       color: var(--ink);
       font-size: 10px;
+      font-family: inherit;
       letter-spacing: .16em;
       text-decoration: none;
       text-transform: uppercase;
+      cursor: pointer;
       animation: outline-pulse 3.8s ease-in-out infinite;
       transition: background .25s ease, color .25s ease, border-color .25s ease;
     }
@@ -297,7 +299,7 @@
     }
 
     .catalog-page {
-      width: min(100% - 48px, 1040px);
+      width: min(100% - 64px, 1440px);
       min-height: 100svh;
       margin: 0 auto;
     }
@@ -370,8 +372,7 @@
 
     .catalog-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 150px));
-      justify-content: center;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -382,12 +383,36 @@
       place-items: center;
       overflow: hidden;
       border: 1px solid rgb(255 255 255 / 15%);
-      background: rgb(255 255 255 / 3%);
+      background:
+        radial-gradient(circle at 50% 40%, rgb(255 255 255 / 6%), transparent 55%),
+        linear-gradient(145deg, rgb(255 255 255 / 4%), rgb(255 255 255 / 1%));
       color: inherit;
       text-decoration: none;
       cursor: default;
       animation: outline-pulse 4s ease-in-out infinite;
-      transition: background .3s ease, border-color .3s ease, transform .3s ease;
+      transition: background .35s ease, border-color .35s ease, transform .45s cubic-bezier(.2, .75, .25, 1);
+      isolation: isolate;
+    }
+
+    .catalog-card::before,
+    .catalog-card::after {
+      position: absolute;
+      z-index: 1;
+      content: "";
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .35s ease;
+    }
+
+    .catalog-card::before {
+      background: radial-gradient(ellipse at 50% 45%, rgb(255 255 255 / 14%), transparent 62%);
+    }
+
+    .catalog-card::after {
+      width: 55%;
+      background: linear-gradient(105deg, transparent, rgb(255 255 255 / 14%), transparent);
+      transform: translateX(-180%) skewX(-18deg);
     }
 
     .catalog-card:nth-child(2n) {
@@ -400,42 +425,84 @@
 
     .catalog-card img {
       position: absolute;
+      z-index: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       inset: 0;
-      transition: filter .25s ease;
+      transition: filter .35s ease, transform .5s cubic-bezier(.2, .75, .25, 1);
     }
 
     .catalog-card h2 {
-      z-index: 1;
+      position: absolute;
+      z-index: 2;
+      right: auto;
+      bottom: 12px;
+      left: 12px;
+      display: flex;
+      width: max-content;
+      max-width: calc(100% - 24px);
+      align-items: center;
+      justify-content: flex-start;
+      gap: 9px;
       margin: 0;
-      padding: 8px 12px;
       color: var(--ink);
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: -.025em;
+      font-size: clamp(10px, 1.1vw, 13px);
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.25;
+      text-align: left;
+      text-shadow: 0 1px 8px rgb(0 0 0 / 90%);
       opacity: 0;
-      transform: translateY(7px);
-      transition: opacity .25s ease, transform .25s ease;
+      transform: translateY(14px) scale(.96);
+      transition: opacity .25s ease, transform .4s cubic-bezier(.2, .75, .25, 1);
+    }
+
+    .catalog-card h2::before {
+      width: 13px;
+      height: 1px;
+      flex: 0 0 13px;
+      background: rgb(255 255 255 / 76%);
+      content: "";
+      transition: width .3s ease, flex-basis .3s ease, background .3s ease;
     }
 
     .catalog-card:hover,
     .catalog-card:focus-visible {
-      transform: translateY(-3px);
-      border-color: rgb(255 255 255 / 45%);
-      background: rgb(255 255 255 / 8%);
+      border-color: rgb(255 255 255 / 62%);
+      background:
+        radial-gradient(circle at 50% 42%, rgb(255 255 255 / 12%), transparent 62%),
+        linear-gradient(145deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 2%));
+    }
+
+    .catalog-card:hover::before,
+    .catalog-card:focus-visible::before {
+      opacity: 1;
+    }
+
+    .catalog-card:hover::after,
+    .catalog-card:focus-visible::after {
+      opacity: 1;
+      animation: card-sheen .8s ease-out both;
     }
 
     .catalog-card:hover img,
     .catalog-card:focus-visible img {
       filter: brightness(.55);
+      transform: scale(1.06);
     }
 
     .catalog-card:hover h2,
     .catalog-card:focus-visible h2 {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
+    }
+
+    .catalog-card:hover h2::before,
+    .catalog-card:focus-visible h2::before {
+      width: 20px;
+      flex-basis: 20px;
+      background: white;
     }
 
     .catalog-count {
@@ -751,6 +818,10 @@
       }
     }
 
+    @keyframes card-sheen {
+      to { transform: translateX(280%) skewX(-18deg); }
+    }
+
     @keyframes outline-pulse {
       0%, 100% {
         box-shadow: inset 0 0 0 0 rgb(255 255 255 / 0%);
@@ -829,7 +900,7 @@
       }
 
       .catalog-grid {
-        grid-template-columns: repeat(2, minmax(0, 150px));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
       }
 
@@ -884,13 +955,19 @@
       }
     }
 
-    @media (min-width: 641px) and (max-width: 900px) {
+    @media (min-width: 641px) and (max-width: 1100px) {
       .catalog-grid {
-        grid-template-columns: repeat(3, minmax(0, 150px));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
       .recommend-list {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 641px) and (max-width: 800px) {
+      .catalog-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
@@ -947,6 +1024,7 @@
         <p class="intro">Explore games that are popular in school times. Try over 100+ games, from racing and arcade to puzzle and retro classics. Better than PixelNebula.</p>
         <div class="actions">
           <a class="explore" href="#games">Explore Games <span aria-hidden="true">↗</span></a>
+          <button class="explore" id="open-blob-site" type="button">Open Website <span aria-hidden="true">↗</span></button>
         </div>
         <div class="games-bar" aria-label="Game stats">
           <div class="game-stat">
@@ -994,20 +1072,57 @@
         <article class="catalog-card" tabindex="0"><h2>Retro Bowl</h2></article>
         <article class="catalog-card" tabindex="0"><h2>Moto X3M</h2></article>
         <article class="catalog-card" tabindex="0"><h2>2048</h2></article>
-        <article class="catalog-card" tabindex="0"><h2>Block Blast</h2></article>
+        <a class="catalog-card" href="#play/block-blast" aria-label="Play Block Blast"><img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/6.png" alt=""><h2>Block Blast</h2></a>
         <article class="catalog-card" tabindex="0"><h2>Space Invaders</h2></article>
         <article class="catalog-card" tabindex="0"><h2>Soccer Skills</h2></article>
         <a class="catalog-card" href="#play" aria-label="Play Clover Pit">
           <img src="https://cdn.jsdelivr.net/gh/boibn/port-images/716.png" alt="">
           <h2>Clover Pit</h2>
         </a>
-        <article class="catalog-card" tabindex="0"><h2>Geometry Dash</h2></article>
+        <a class="catalog-card" href="#geometry-dash" aria-label="Choose a Geometry Dash version">
+          <img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/geo.png" alt="">
+          <h2>Geometry Dash</h2>
+        </a>
+        <a class="catalog-card" href="#play/cookie-clicker" aria-label="Play Cookie Clicker">
+          <img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/82.png" alt="">
+          <h2>Cookie Clicker</h2>
+        </a>
+        <a class="catalog-card" href="#play/yohoho-io" aria-label="Play Yohoho.io">
+          <img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/835.png" alt="">
+          <h2>Yohoho.io</h2>
+        </a>
+        <a class="catalog-card" href="#play/buckshot-roulette" aria-label="Play Buckshot Roulette"><img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/205.png" alt=""><h2>Buckshot Roulette</h2></a>
+        <a class="catalog-card" href="#play/cluster-truck" aria-label="Play Cluster Truck"><img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/848.jpg" alt=""><h2>Cluster Truck</h2></a>
+        <article class="catalog-card" tabindex="0"><h2>Chess</h2></article>
+        <article class="catalog-card" tabindex="0"><h2>Tetris</h2></article>
+        <article class="catalog-card" tabindex="0"><h2>Flappy Bird</h2></article>
+        <article class="catalog-card" tabindex="0"><h2>Basketball Stars</h2></article>
+        <article class="catalog-card" tabindex="0"><h2>Drift Hunters</h2></article>
+        <article class="catalog-card" tabindex="0"><h2>Stickman Hook</h2></article>
       </div>
-      <p class="catalog-count">10 quick picks · more favorites on the way</p>
+      <p class="catalog-count">21 quick picks · more favorites on the way</p>
     </main>
   </section>
 
-  <section class="player-page" id="player-view" hidden aria-label="Clover Pit game">
+  <section class="catalog-page" id="geometry-dash-view" hidden aria-labelledby="geometry-dash-title">
+    <header class="catalog-topbar">
+      <a class="wordmark" href="#home" aria-label="Gameverse home">GAMEVERSE</a>
+      <a class="catalog-note" href="#games">Back to games</a>
+    </header>
+    <main class="catalog-main">
+      <div class="catalog-heading">
+        <p class="eyebrow">Choose a version</p>
+        <h1 id="geometry-dash-title">Geometry Dash</h1>
+        <p>Select which version you want to play.</p>
+      </div>
+      <div class="catalog-grid">
+        <a class="catalog-card" href="#play/geometry-dash" aria-label="Play Web Dashers"><img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/geo.png" alt=""><h2>Web Dashers</h2></a>
+        <a class="catalog-card" href="#play/geometry-dash-port" aria-label="Play Geometry Dash, Port"><img src="https://cdn.jsdelivr.net/gh/boibn/port-images@main/868.png" alt=""><h2>Geometry Dash, Port</h2></a>
+      </div>
+    </main>
+  </section>
+
+  <section class="player-page" id="player-view" hidden aria-label="Game player">
     <header class="player-topbar">
       <a class="wordmark" href="#home">GAMEVERSE</a>
       <div class="player-actions">
@@ -1021,13 +1136,13 @@
       <div class="player-heading">
         <div>
           <p class="player-kicker">Now playing</p>
-          <h1>Clover Pit</h1>
+          <h1 id="player-game-title">Clover Pit</h1>
         </div>
         <p class="player-hint">Your recent game · Pick up where you left off</p>
       </div>
       <div class="game-wrap" id="game-wrap">
-        <iframe id="game-frame" src="about:blank" title="Clover Pit game" allow="fullscreen; gamepad"></iframe>
-        <div id="loading" role="status" hidden>Loading Clover Pit…</div>
+        <iframe id="game-frame" src="about:blank" title="Game player" allow="fullscreen; gamepad"></iframe>
+        <div id="loading" role="status" hidden>Loading game…</div>
         <div id="game-status" role="status" aria-live="polite"></div>
       </div>
       <div class="discovery">
@@ -1036,9 +1151,9 @@
             <h2 id="recent-title">Recently played</h2>
             <a href="#games">All games</a>
           </div>
-          <a class="discovery-card" href="#play" aria-current="page">
-            <span class="recent-art"><img src="https://cdn.jsdelivr.net/gh/boibn/port-images/716.png" alt=""></span>
-            <span class="recent-copy"><strong>Clover Pit</strong><span>Playing now · Continue</span></span>
+          <a class="discovery-card" id="recently-played-card" href="#play" aria-current="page">
+            <span class="recent-art"><img id="recent-game-image" src="https://cdn.jsdelivr.net/gh/boibn/port-images/716.png" alt=""></span>
+            <span class="recent-copy"><strong id="recent-game-title">Clover Pit</strong><span>Playing now · Continue</span></span>
           </a>
         </section>
         <section class="discovery-section" aria-labelledby="recommend-title">
@@ -1066,47 +1181,97 @@
   </section>
 
   <script>
+    const openExternalSiteButton = document.getElementById("open-blob-site");
+
+    openExternalSiteButton.addEventListener("click", () => {
+      const openedPage = window.open("about:blank", "_blank");
+      if (!openedPage) {
+        window.alert("The new tab was blocked. Allow pop-ups for this page and try again.");
+        return;
+      }
+
+      openedPage.document.open();
+      openedPage.document.write(`<!doctype html>${document.documentElement.outerHTML}`);
+      openedPage.document.close();
+    });
+
     const views = {
       home: document.getElementById("home-view"),
       games: document.getElementById("games-view"),
+      "geometry-dash": document.getElementById("geometry-dash-view"),
       play: document.getElementById("player-view")
     };
-    const gameUrl = "https://cdn.jsdelivr.net/gh/boibn/ports@main/716-fix2.html";
+    const gameCatalog = {
+      "clover-pit": { title: "Clover Pit", url: "https://cdn.jsdelivr.net/gh/boibn/ports@main/716-fix2.html", image: "https://cdn.jsdelivr.net/gh/boibn/port-images/716.png" },
+      "cookie-clicker": { title: "Cookie Clicker", url: "https://cdn.jsdelivr.net/gh/boibn/html@main/82-a.html", image: "https://cdn.jsdelivr.net/gh/boibn/port-images@main/82.png" },
+      "geometry-dash": { title: "Geometry Dash", url: "https://cdn.jsdelivr.net/gh/boibn/ports@main/785-upd3.html", image: "https://cdn.jsdelivr.net/gh/boibn/port-images@main/geo.png" },
+      "geometry-dash-port": { title: "Geometry Dash, Port", url: "https://cdn.jsdelivr.net/gh/boibn/html@main/geo.html", image: "https://cdn.jsdelivr.net/gh/boibn/port-images@main/868.png" },
+      "yohoho-io": { title: "Yohoho.io", url: "https://cdn.jsdelivr.net/gh/boibn/html@main/835.html", image: "https://cdn.jsdelivr.net/gh/boibn/port-images@main/835.png" },
+      "buckshot-roulette": { title: "Buckshot Roulette", url: "https://cdn.jsdelivr.net/gh/boibn/html@main/205-ff.html", image: "https://cdn.jsdelivr.net/gh/boibn/port-images@main/205.png" },
+      "cluster-truck": { title: "Cluster Truck", url: "https://cdn.jsdelivr.net/gh/boibn/html@main/848.html", image: "https://cdn.jsdelivr.net/gh/boibn/port-images@main/848.jpg" },
+      "block-blast": { title: "Block Blast", url: "https://cdn.jsdelivr.net/gh/boibn/html@main/6-f.html", image: "https://cdn.jsdelivr.net/gh/boibn/port-images@main/6.png" }
+    };
     const gameFrame = document.getElementById("game-frame");
     const loading = document.getElementById("loading");
     const gameWrap = document.getElementById("game-wrap");
+    const playerGameTitle = document.getElementById("player-game-title");
+    const recentlyPlayedCard = document.getElementById("recently-played-card");
+    const recentGameTitle = document.getElementById("recent-game-title");
+    const recentGameImage = document.getElementById("recent-game-image");
     const favoriteButton = document.getElementById("favorite-button");
     const reloadButton = document.getElementById("reload-button");
     const fullscreenButton = document.getElementById("fullscreen-button");
     const gameStatus = document.getElementById("game-status");
-    const favoriteKey = "gameverse-favorite-clover-pit";
+    let activeGameKey = "clover-pit";
+    let loadedGameKey = "";
     let gameMarkup = "";
-    let gameLoaded = false;
     let favoriteIsSaved = false;
 
     function showView() {
-      const viewName = location.hash.slice(1) || "home";
+      const route = location.hash.slice(1).split("/");
+      const viewName = route[0] || "home";
+      const requestedGameKey = route[1] || "clover-pit";
       const activeView = Object.prototype.hasOwnProperty.call(views, viewName) ? viewName : "home";
       for (const [name, view] of Object.entries(views)) {
         view.hidden = name !== activeView;
       }
+      if (activeView === "play") {
+        activeGameKey = Object.prototype.hasOwnProperty.call(gameCatalog, requestedGameKey) ? requestedGameKey : "clover-pit";
+        const currentGame = gameCatalog[activeGameKey];
+        playerGameTitle.textContent = currentGame.title;
+        gameFrame.title = `${currentGame.title} game`;
+        recentlyPlayedCard.href = `#play/${activeGameKey}`;
+        recentGameTitle.textContent = currentGame.title;
+        recentGameImage.src = currentGame.image;
+        document.getElementById("player-view").setAttribute("aria-label", `${currentGame.title} game player`);
+        favoriteIsSaved = false;
+        try {
+          favoriteIsSaved = localStorage.getItem(`gameverse-favorite-${activeGameKey}`) === "true";
+        } catch (error) {
+          gameStatus.textContent = "Favorites cannot be loaded in this browser mode.";
+        }
+        updateFavoriteButton(favoriteIsSaved);
+      }
       document.title = activeView === "play"
-        ? "Clover Pit — Gameverse"
+        ? `${gameCatalog[activeGameKey].title} — Gameverse`
         : activeView === "games"
           ? "Games — Gameverse"
-          : "Gameverse — School-Time Game Favorites";
-      if (activeView === "play" && !gameLoaded) {
-        fetchGame();
+          : activeView === "geometry-dash"
+            ? "Choose a Geometry Dash version — Gameverse"
+            : "Gameverse — School-Time Game Favorites";
+      if (activeView === "play" && loadedGameKey !== activeGameKey) {
+        fetchGame(activeGameKey);
       }
       window.scrollTo(0, 0);
     }
 
     window.addEventListener("hashchange", showView);
 
-    function fetchGame() {
+    function fetchGame(gameKey) {
+      const selectedGame = gameCatalog[gameKey];
       loading.hidden = false;
-      loading.textContent = "Loading Clover Pit…";
-      fetch(gameUrl)
+      loading.textContent = `Loading ${selectedGame.title}…`;
+      fetch(selectedGame.url)
         .then(response => {
           if (!response.ok) {
             throw new Error(`Game source returned HTTP ${response.status}`);
@@ -1114,23 +1279,29 @@
           return response.text();
         })
         .then(source => {
+          if (activeGameKey !== gameKey || location.hash.slice(1).split("/")[0] !== "play") {
+            return;
+          }
           gameMarkup = source;
-          loadGame();
+          loadGame(gameKey);
         })
         .catch(error => {
-          loading.textContent = `Unable to load Clover Pit: ${error.message}`;
+          if (activeGameKey === gameKey) {
+            loading.textContent = `Unable to load ${selectedGame.title}: ${error.message}`;
+          }
         });
     }
 
-    function loadGame() {
+    function loadGame(gameKey) {
+      const selectedGame = gameCatalog[gameKey];
       loading.hidden = false;
-      loading.textContent = "Loading Clover Pit…";
+      loading.textContent = `Loading ${selectedGame.title}…`;
       gameStatus.textContent = "";
       const gameDocument = new DOMParser().parseFromString(gameMarkup, "text/html");
       let baseElement = gameDocument.querySelector("base");
       if (!baseElement) {
         baseElement = gameDocument.createElement("base");
-        baseElement.href = gameUrl;
+        baseElement.href = selectedGame.url;
         gameDocument.head.prepend(baseElement);
       }
       const storageShim = gameDocument.createElement("script");
@@ -1139,12 +1310,15 @@
 
       const frameDocument = gameFrame.contentDocument;
       frameDocument.open();
-      frameDocument.write('<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body,#game{width:100%;height:100%;margin:0;background:#000}#game{display:block;border:0}</style></head><body><iframe id="game" sandbox="allow-scripts allow-forms allow-pointer-lock" allow="fullscreen; gamepad" allowfullscreen title="Clover Pit"></iframe></body></html>');
+      frameDocument.write(`<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body,#game{width:100%;height:100%;margin:0;background:#000}#game{display:block;border:0}</style></head><body><iframe id="game" sandbox="allow-scripts allow-forms allow-pointer-lock" allow="fullscreen; gamepad" allowfullscreen title="${selectedGame.title}"></iframe></body></html>`);
       frameDocument.close();
       const game = frameDocument.getElementById("game");
       game.addEventListener("load", () => {
+        if (activeGameKey !== gameKey) {
+          return;
+        }
         loading.hidden = true;
-        gameLoaded = true;
+        loadedGameKey = gameKey;
       }, { once: true });
       game.srcdoc = `<!doctype html>${gameDocument.documentElement.outerHTML}`;
     }
@@ -1165,20 +1339,16 @@
       favoriteIsSaved = !favoriteIsSaved;
       updateFavoriteButton(favoriteIsSaved);
       try {
-        localStorage.setItem(favoriteKey, String(favoriteIsSaved));
-        gameStatus.textContent = favoriteIsSaved ? "Clover Pit added to favorites." : "Clover Pit removed from favorites.";
+        localStorage.setItem(`gameverse-favorite-${activeGameKey}`, String(favoriteIsSaved));
+        gameStatus.textContent = favoriteIsSaved ? `${gameCatalog[activeGameKey].title} added to favorites.` : `${gameCatalog[activeGameKey].title} removed from favorites.`;
       } catch (error) {
         gameStatus.textContent = "Favorite changed for this visit, but could not be saved.";
       }
     });
 
     reloadButton.addEventListener("click", () => {
-      if (gameMarkup) {
-        gameLoaded = false;
-        loadGame();
-      } else {
-        fetchGame();
-      }
+      loadedGameKey = "";
+      fetchGame(activeGameKey);
     });
 
     fullscreenButton.addEventListener("click", async () => {
